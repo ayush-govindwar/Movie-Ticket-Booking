@@ -3,25 +3,29 @@ require('dotenv').config();
 const express = require("express");
 const app = express();
 
-//rest ot packages
+//rest of the packages
 const cors = require('cors');
+const cookieParser = require("cookie-parser");
 
 //database
 const connectDB = require('./db/connect');
 
 //router
-const authRouter = require('./router/authRoutes');
+const authRouter = require('./routes/authRoutes');
 
 //middleware
-const notFoundMiddleware = require('./middleware/not-found');
-const errorHandlerMiddleware = require('./middleware/error-handler');
+
+
+//testing
+
+
 
 
 app.use(express.json());
 app.use(cors());
-app.use(express.json());
+app.use(cookieParser(process.env.JWT_SECRET));
 
-
+app.use('/api/v1/auth', authRouter);
 
 
 const port = process.env.PORT || 5000;
