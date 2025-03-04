@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const {authorizePermissions , authenticateUser,} = require('../middleware/authentication')
+const {authorizePermissions , authenticateUser,authMiddleware} = require('../middleware/authentication')
 const {
     addBooking,
     getBooking,
     simulatePrice
     
 } = require("../controllers/bookingController")
+
 
 
 router.post('/addBooking',authenticateUser, addBooking )

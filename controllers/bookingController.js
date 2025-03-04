@@ -34,7 +34,9 @@ const addBooking = async (req, res) => {
   try {
     const booking = await Booking.create({ userId, showId, seatsBooked, totalPrice });
     
+    // Update show information
     show.bookedSeats += seatsBooked;
+    show.attendees.push(userId); // Add user to attendees
     await show.save();
 
     res.status(201).json({
@@ -47,7 +49,6 @@ const addBooking = async (req, res) => {
     res.status(400).json({ message: 'Booking failed', error: error.message });
   }
 };
-
 const simulatePrice = async (req, res) => {
   const { seatsBooked, currentBookedSeats, totalSeats, basePrice, showTime, bookingTime } = req.body;
 

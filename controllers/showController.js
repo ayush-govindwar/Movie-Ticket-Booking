@@ -1,8 +1,10 @@
 const Show = require('../models/Show')
 const Movie = require('../models/Movies')
+const User = require('../models/User')
 const mongoose = require('mongoose');
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
+const sendUpdatesEmail = require('../utils/sendUpdatesEmail');
 
 
 const getAllShows = async (req, res) => {
@@ -98,13 +100,12 @@ const deleteShow = async (req, res) => {
         error: error.message,
       });
     }
-  };
+  }
 
 
 const updateShow = async (req, res) => {
   const Id = req.params.id;
 
-  // Validate Show ID format
   if (!mongoose.Types.ObjectId.isValid(Id)) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: 'Invalid Show ID',
@@ -112,7 +113,6 @@ const updateShow = async (req, res) => {
   }
 
   try {
-    // Find and validate the show exists
     const show = await Show.findById(Id);
     if (!show) {
       return res.status(StatusCodes.NOT_FOUND).json({
@@ -120,7 +120,6 @@ const updateShow = async (req, res) => {
       });
     }
 
-    // Define allowed fields and validate updates
     const allowedUpdates = ['theater', 'showTime', 'totalSeats', 'bookedSeats', 'basePrice'];
     const updates = Object.keys(req.body);
     const isValidOperation = updates.every(update => allowedUpdates.includes(update));
@@ -131,19 +130,39 @@ const updateShow = async (req, res) => {
       });
     }
 
-    // Apply updates
     updates.forEach(update => (show[update] = req.body[update]));
 
-    // Validate seat numbers
     if (show.totalSeats < show.bookedSeats) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         message: 'Total seats cannot be less than booked seats',
       });
     }
 
-    // Save and return updated show
     const updatedShow = await show.save();
+
+    // Send response first
     res.status(StatusCodes.OK).json({ show: updatedShow });
+
+    // Email notification logic (no local error handling)
+    const populatedShow = await Show.findById(updatedShow._id)
+      .populate('movieId', 'title');
+
+    if (populatedShow.attendees.length > 0) {
+      const attendees = await User.find(
+        { _id: { $in: populatedShow.attendees } },
+        'name email'
+      );
+
+      await Promise.all(attendees.map(async (user) => {
+        await sendUpdatesEmail({
+          name: user.name,
+          email: user.email,
+          eventTitle: populatedShow.movieId.title,
+          theater: populatedShow.theater,
+          showTime: populatedShow.showTime
+        });
+      }));
+    }
 
   } catch (error) {
     res.status(StatusCodes.BAD_REQUEST).json({
@@ -152,7 +171,6 @@ const updateShow = async (req, res) => {
     });
   }
 };
-
 module.exports = {
 getAllShows,
 addShow,

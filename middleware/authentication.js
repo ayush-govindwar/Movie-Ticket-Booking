@@ -45,8 +45,27 @@ const authorizePermissions = (...roles) => {
     next();
   };
 };
+const authMiddleware = (req, res, next) => {
+  // Get the access token from the signed cookies
+  const accessToken = req.signedCookies.accessToken;
+
+  if (!accessToken) {
+    return res.status(401).json({ message: 'No access token provided. Access denied.' });
+  }
+
+  try {
+    // Verify the access token and decode it
+    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+    req.user = decoded.user; // Attach the user data to the request object
+    next();
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid access token. Access denied.' });
+  }
+};
 
 module.exports = {
   authenticateUser,
   authorizePermissions,
+  authMiddleware
+
 };
