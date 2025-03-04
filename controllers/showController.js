@@ -30,7 +30,8 @@ const getAllShows = async (req, res) => {
   };
 
 const addShow = async (req, res) => {
-const { movieId, theater, showTime, totalSeats, bookedSeats, basePrice } = req.body;
+const movieId = req.params.Id;
+const { theater, showTime, totalSeats, bookedSeats, basePrice } = req.body;
 
 
 if (!mongoose.Types.ObjectId.isValid(movieId)) {
@@ -98,8 +99,63 @@ const deleteShow = async (req, res) => {
       });
     }
   };
+
+
+const updateShow = async (req, res) => {
+  const Id = req.params.id;
+
+  // Validate Show ID format
+  if (!mongoose.Types.ObjectId.isValid(Id)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: 'Invalid Show ID',
+    });
+  }
+
+  try {
+    // Find and validate the show exists
+    const show = await Show.findById(Id);
+    if (!show) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        message: 'Show not found',
+      });
+    }
+
+    // Define allowed fields and validate updates
+    const allowedUpdates = ['theater', 'showTime', 'totalSeats', 'bookedSeats', 'basePrice'];
+    const updates = Object.keys(req.body);
+    const isValidOperation = updates.every(update => allowedUpdates.includes(update));
+
+    if (!isValidOperation) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: 'Invalid update fields!',
+      });
+    }
+
+    // Apply updates
+    updates.forEach(update => (show[update] = req.body[update]));
+
+    // Validate seat numbers
+    if (show.totalSeats < show.bookedSeats) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: 'Total seats cannot be less than booked seats',
+      });
+    }
+
+    // Save and return updated show
+    const updatedShow = await show.save();
+    res.status(StatusCodes.OK).json({ show: updatedShow });
+
+  } catch (error) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: 'Failed to update show',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
 getAllShows,
 addShow,
-deleteShow
-  };
+deleteShow,
+updateShow
+};

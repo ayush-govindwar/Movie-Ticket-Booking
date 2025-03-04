@@ -31,7 +31,7 @@ app.use(cookieParser(process.env.JWT_SECRET));
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/show', showRouter);
 app.use('/api/v1/movie', movieRouter);
-app.use('api/v1/booking', bookingRouter)
+app.use('/api/v1/booking', bookingRouter)
 
 const port = process.env.PORT || 5000;
 const start = async () => {
