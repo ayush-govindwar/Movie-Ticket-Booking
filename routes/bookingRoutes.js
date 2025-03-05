@@ -3,7 +3,6 @@ const router = express.Router();
 
 const {authorizePermissions , authenticateUser,authMiddleware} = require('../middleware/authentication')
 const {
-    addBooking,
     getBooking,
     simulatePrice
     
@@ -11,7 +10,7 @@ const {
 
 
 
-router.post('/addBooking',authenticateUser, addBooking )
+//router.post('/addBooking',authenticateUser, addBooking )
 router.get('/getBooking',authenticateUser, getBooking)
 router.post('/simulate',authenticateUser, simulatePrice);
 

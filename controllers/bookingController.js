@@ -4,51 +4,51 @@ const Show = require('../models/Show');
 const { StatusCodes } = require('http-status-codes');
 const { calculateDynamicPrice } = require('../utils/pricing');
 
-const addBooking = async (req, res) => {
-  const { userId } = req.user;
-  const { showId, seatsBooked } = req.body;
+// const addBooking = async (req, res) => {
+//   const { userId } = req.user;
+//   const { showId, seatsBooked } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(showId)) {
-    return res.status(400).json({ message: 'Invalid Show ID' });
-  }
+//   if (!mongoose.Types.ObjectId.isValid(showId)) {
+//     return res.status(400).json({ message: 'Invalid Show ID' });
+//   }
 
-  const show = await Show.findById(showId);
-  if (!show) return res.status(404).json({ message: 'Show not found' });
+//   const show = await Show.findById(showId);
+//   if (!show) return res.status(404).json({ message: 'Show not found' });
 
-  if (show.bookedSeats + seatsBooked > show.totalSeats) {
-    return res.status(400).json({ message: 'Not enough seats available' });
-  }
+//   if (show.bookedSeats + seatsBooked > show.totalSeats) {
+//     return res.status(400).json({ message: 'Not enough seats available' });
+//   }
 
-  // Calculate dynamic price
-  const pricePerSeat = calculateDynamicPrice({
-    basePrice: show.basePrice,
-    bookedSeats: show.bookedSeats,
-    seatsBooked,
-    totalSeats: show.totalSeats,
-    showTime: show.showTime,
-    bookingTime: new Date(),
-  });
+//   // Calculate dynamic price
+//   const pricePerSeat = calculateDynamicPrice({
+//     basePrice: show.basePrice,
+//     bookedSeats: show.bookedSeats,
+//     seatsBooked,
+//     totalSeats: show.totalSeats,
+//     showTime: show.showTime,
+//     bookingTime: new Date(),
+//   });
 
-  const totalPrice = pricePerSeat * seatsBooked;
+//   const totalPrice = pricePerSeat * seatsBooked;
 
-  try {
-    const booking = await Booking.create({ userId, showId, seatsBooked, totalPrice });
+//   try {
+//     const booking = await Booking.create({ userId, showId, seatsBooked, totalPrice });
     
-    // Update show information
-    show.bookedSeats += seatsBooked;
-    show.attendees.push(userId); // Add user to attendees
-    await show.save();
+//     // Update show information
+//     show.bookedSeats += seatsBooked;
+//     show.attendees.push(userId); // Add user to attendees
+//     await show.save();
 
-    res.status(201).json({
-      message: show.bookedSeats === show.totalSeats 
-        ? 'Booking successful. All seats booked!' 
-        : 'Booking successful',
-      booking
-    });
-  } catch (error) {
-    res.status(400).json({ message: 'Booking failed', error: error.message });
-  }
-};
+//     res.status(201).json({
+//       message: show.bookedSeats === show.totalSeats 
+//         ? 'Booking successful. All seats booked!' 
+//         : 'Booking successful',
+//       booking
+//     });
+//   } catch (error) {
+//     res.status(400).json({ message: 'Booking failed', error: error.message });
+//   }
+// };
 const simulatePrice = async (req, res) => {
   const { seatsBooked, currentBookedSeats, totalSeats, basePrice, showTime, bookingTime } = req.body;
 
@@ -93,4 +93,4 @@ try {
 }
 };
 
-module.exports = {addBooking , getBooking , simulatePrice }
+module.exports = { getBooking , simulatePrice }

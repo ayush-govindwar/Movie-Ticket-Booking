@@ -15,6 +15,7 @@ const authRouter = require('./routes/authRoutes');
 const showRouter = require('./routes/showRoutes');
 const movieRouter = require('./routes/movieRoutes');
 const bookingRouter = require('./routes/bookingRoutes')
+const paymentRouter = require('./routes/paymentRoutes')
 //middleware
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
@@ -32,6 +33,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/show', showRouter);
 app.use('/api/v1/movie', movieRouter);
 app.use('/api/v1/booking', bookingRouter)
+app.use('/api/v1/payment', paymentRouter)
 
 const port = process.env.PORT || 5000;
 const start = async () => {
