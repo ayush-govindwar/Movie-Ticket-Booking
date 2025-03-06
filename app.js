@@ -21,6 +21,7 @@ const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
 //testing
+const { startLockCleanupJob } = require('./controllers/paymentController');
 
 
 
@@ -35,7 +36,7 @@ app.use('/api/v1/movie', movieRouter);
 app.use('/api/v1/booking', bookingRouter)
 app.use('/api/v1/payment', paymentRouter)
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL);
@@ -48,3 +49,4 @@ const start = async () => {
 };
 
 start();
+startLockCleanupJob();

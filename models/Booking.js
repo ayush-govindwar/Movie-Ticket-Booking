@@ -13,6 +13,8 @@ const bookingSchema = new mongoose.Schema({
   razorpayOrderId: { type: String },
   razorpayPaymentId: { type: String },
   bookedAt: { type: Date, default: Date.now },
+  lockedSeats: { type: Number }, //per booking
+  lockedUntil: { type: Date },
 });
 
 module.exports = mongoose.model("Booking", bookingSchema);
