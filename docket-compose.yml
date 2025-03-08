@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: movie-ticket-booking-api
+    container_name: movie-ticket-booking-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGO_URL=mongodb+srv://swayushgovindwar:ayush1234@nodeexpressproject.a1cj2.mongodb.net/?retryWrites=true&w=majority&appName=nodeexpressproject
+      - JWT_SECRET=pEXlf2nMNWlUCNSf70A3i8VlVQ5nlRvoY3ITF40R2D3uQNN8c7FDVhXtzrP9jXQ
+      - JWT_LIFETIME=1d
+      - RAZORPAY_KEY_ID=rzp_test_VU0YTJAGB8mbLT
+      - RAZORPAY_KEY_SECRET=ncN4mc8neJroT3nla79k3Nav
+      - RAZORPAY_WEBHOOK_SECRET=12345678
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
