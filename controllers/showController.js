@@ -143,7 +143,7 @@ const updateShow = async (req, res) => {
     // Send response first
     res.status(StatusCodes.OK).json({ show: updatedShow });
 
-    // Email notification logic (no local error handling)
+    // Email notification logic
     const populatedShow = await Show.findById(updatedShow._id)
       .populate('movieId', 'title');
 

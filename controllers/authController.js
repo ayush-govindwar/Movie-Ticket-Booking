@@ -115,11 +115,11 @@ const login = async (req, res) => {
 };
 //the flow is:
 
-// 1️⃣ User logs in → Check if email & password are correct.
-// 2️⃣ Check for an existing refresh token in the database:
+// User logs in → Check if email & password are correct.
+// Check for an existing refresh token in the database:
 
-// ✅ If it exists, use that same refresh token and send it in cookies.
-// ❌ If it doesn’t exist, generate a new refresh token, store it in the DB, and send it in cookies.
+// If it exists, use that same refresh token and send it in cookies.
+// If it doesn’t exist, generate a new refresh token, store it in the DB, and send it in cookies.
 
 
 
@@ -136,8 +136,8 @@ const logout = async (req, res) => { //for logout remove the refresh token
   });
   res.status(StatusCodes.OK).json({ msg: 'user logged out!' });
 };
-//1️⃣ res.cookie('accessToken', 'logout', {...}) → Sets the accessToken cookie with the value "logout".
-// 2️⃣ expires: new Date(Date.now()) → Expires the cookie immediately, removing it from the browser.
+//res.cookie('accessToken', 'logout', ) → Sets the accessToken cookie with the value "logout".
+// expires: new Date(Date.now()) → Expires the cookie immediately, removing it from the browser.
 
 
 

@@ -1,12 +1,26 @@
-
+// routes/paymentRoutes.js
 const express = require('express');
 const router = express.Router();
-const { createRazorpayOrder, handlePaymentWebhook, getPaymentPage} = require('../controllers/paymentController');
-const { authenticateUser } = require('../middleware/authentication.js');
+const { authenticateUser } = require('../middleware/authentication');
+const { 
+  createRazorpayOrder, 
+  handlePaymentWebhook,
+  getPaymentPage,
+  handlePaymentSuccess,
+  handlePaymentFailure
+} = require('../controllers/paymentController');
 
+// Create order route
 router.post('/create-order', authenticateUser, createRazorpayOrder);
+
+// Payment page
 router.get('/pay/:orderId', getPaymentPage);
-router.post('/webhook', express.raw({ type: 'application/json' }), handlePaymentWebhook);
-router.get('/payment-success/:paymentId', (req, res) => res.send('Payment Successful!'));
-router.get('/payment-failed', (req, res) => res.send('Payment Failed!'));
+
+// Payment callbacks
+router.get('/payment-success', handlePaymentSuccess);
+router.get('/payment-failed', handlePaymentFailure);
+
+// Webhook for Razorpay
+router.post('/webhook', handlePaymentWebhook);
+
 module.exports = router;

@@ -27,7 +27,7 @@ const { startLockCleanupJob } = require('./controllers/paymentController');
 
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(cookieParser(process.env.JWT_SECRET));
 
 app.use('/api/v1/auth', authRouter);

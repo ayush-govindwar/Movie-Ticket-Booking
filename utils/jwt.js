@@ -16,14 +16,12 @@ const attachCookiesToResponse = ({ res, user, refreshToken }) => {
 
   res.cookie('accessToken', accessTokenJWT, { //name value options
     httpOnly: true,
-    //secure: process.env.NODE_ENV === 'production', This option ensures that the cookie is only sent over secure (HTTPS) connections in production
     signed: true,
     expires: new Date(Date.now() + oneDay),
   });
 
   res.cookie('refreshToken', refreshTokenJWT, {
     httpOnly: true,
-    //secure: process.env.NODE_ENV === 'production',
     signed: true,
     expires: new Date(Date.now() + longerExp),
   });
