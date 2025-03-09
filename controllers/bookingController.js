@@ -3,7 +3,9 @@ const Booking = require('../models/Booking');
 const Show = require('../models/Show');
 const { StatusCodes } = require('http-status-codes');
 const { calculateDynamicPrice } = require('../utils/pricing');
+ 
 
+//this function was removed when payment was added
 // const addBooking = async (req, res) => {
 //   const { userId } = req.user;
 //   const { showId, seatsBooked } = req.body;
