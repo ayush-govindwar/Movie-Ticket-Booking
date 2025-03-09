@@ -15,6 +15,7 @@ A full-featured API for movie ticket booking with advanced reservation managemen
 
 ### Show Management
 - Flexible Scheduling with customizable theaters, showtimes, and seating capacity
+- Role based access 
 - Admin Dashboard for managing shows (add, update, delete)
 - Email Notifications to attendees when show details are modified
 
