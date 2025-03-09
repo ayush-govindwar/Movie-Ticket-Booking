@@ -20,7 +20,7 @@ A full-featured API for movie ticket booking with advanced reservation managemen
 - Email Notifications to attendees when show details are modified
 
 ### Booking System
-- Intelligent Seat Locking mechanism that temporarily reserves seats during payment process
+- Intelligent Seat Locking mechanism that temporarily reserves seats during payment process (refer assets folder for example)
 - Automated Lock Release for abandoned/expired bookings (prevents ghost bookings)
 - Attendee Tracking for each show
 
@@ -42,7 +42,8 @@ A full-featured API for movie ticket booking with advanced reservation managemen
   - Secondary server-side verification ensuring successful transactions even if users close windows before redirect
   - Thus successful transaction takes place regardless
 - Session-based database operations to avoid race conditions
-- Elegant Payment Pages with real-time countdown timers for locked seats
+- Elegant Payment Pages with real-time countdown timers for locked seats (refer assets folder for images)
+
 
 ## Getting Started
 
@@ -61,7 +62,7 @@ PORT=3000
 NODE_ENV=development
 
 # MongoDB
-MONGO_URI=mongodb://localhost:27017/movie-booking
+MONGO_URI=mongodb://...
 
 # JWT
 JWT_SECRET=your_jwt_secret
@@ -96,11 +97,15 @@ npm start
 
 #### Docker Setup
 ```bash
+# Build and run with Docker Compose
+docker-compose up -d
+
+# Or if you prefer to build and run manually:
 # Build the Docker image
-docker build -t movie-ticket-booking .
+docker build -t movie-ticket-booking-api .
 
 # Run the container
-docker run -p 3000:3000 --env-file .env movie-ticket-booking
+docker run -p 5001:5001 --env-file .env movie-ticket-booking-api
 ```
 
 ## API Endpoints
