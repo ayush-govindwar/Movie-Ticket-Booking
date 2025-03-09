@@ -9,7 +9,7 @@ services:
     container_name: movie-ticket-booking-api
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "5001:5001"
     environment:
       - NODE_ENV=production
       - MONGO_URL=mongodb+srv://swayushgovindwar:ayush1234@nodeexpressproject.a1cj2.mongodb.net/?retryWrites=true&w=majority&appName=nodeexpressproject

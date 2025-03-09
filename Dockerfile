@@ -17,7 +17,7 @@ RUN npm install
 COPY . .
 
 # Expose API port
-EXPOSE 5000
+EXPOSE 5001
 
 # Command to run the application
 CMD ["node", "app.js"]
