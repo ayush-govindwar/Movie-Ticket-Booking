@@ -62,7 +62,7 @@ PORT=3000
 NODE_ENV=development
 
 # MongoDB
-MONGO_URI=mongodb://localhost:27017/movie-booking
+MONGO_URI=mongodb://...
 
 # JWT
 JWT_SECRET=your_jwt_secret
