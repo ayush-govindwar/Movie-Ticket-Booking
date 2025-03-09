@@ -2,42 +2,46 @@
 
 A full-featured API for movie ticket booking with advanced reservation management, dynamic pricing, and secure payment processing.
 
-##  Features
+## Features
 
 ### Authentication
-- **Secure User Registration** with email verification
-- **Token-based Authentication** with access and refresh tokens stored in HTTP-only cookies
-- **Role-based Access Control** for admin and regular user operations
+- Secure User Registration with email verification
+- Token-based Authentication with access and refresh tokens stored in HTTP-only cookies
+- Role-based Access Control for admin and regular user operations
 
 ### Movie Management
-- **Movie Catalog** with comprehensive details (title, genre, duration, release date)
-- **Admin Controls** for adding, updating, and removing movies from the catalog
+- Movie Catalog with comprehensive details (title, genre, duration, release date)
+- Admin Controls for adding, updating, and removing movies from the catalog
 
 ### Show Management
-- **Flexible Scheduling** with customizable theaters, showtimes, and seating capacity
-- **Admin Dashboard** for managing shows (add, update, delete)
-- **Email Notifications** to attendees when show details are modified
+- Flexible Scheduling with customizable theaters, showtimes, and seating capacity
+- Admin Dashboard for managing shows (add, update, delete)
+- Email Notifications to attendees when show details are modified
 
 ### Booking System
-- **Intelligent Seat Locking** mechanism that temporarily reserves seats during payment process
-- **Automated Lock Release** for abandoned/expired bookings (prevents ghost bookings)
-- **Attendee Tracking** for each show
+- Intelligent Seat Locking mechanism that temporarily reserves seats during payment process
+- Automated Lock Release for abandoned/expired bookings (prevents ghost bookings)
+- Attendee Tracking for each show
 
 ### Dynamic Pricing
-- **Smart Pricing Algorithm** that adjusts ticket costs based on:
+- Smart Pricing Algorithm that adjusts ticket costs based on:
   - Current booking percentage
   - Time until show
   - Base ticket price
   - Number of seats being booked
-- **Price Simulation Tool** for customers to check potential pricing before booking
+- Price Simulation Tool for customers to check potential pricing before booking
 
 ### Payment Processing
-- **Secure Integration** with Razorpay payment gateway
-- **Two-Layer Payment Handling**:
+- Secure Integration with Razorpay payment gateway
+- Two-Layer Payment Handling:
   - Frontend redirect for user-initiated payments
   - Backend webhook processing for payment verification
-- **Transaction Resilience** with session-based database operations
-- **Elegant Payment Pages** with real-time countdown timers for locked seats
+- Robust Dual Payment System:
+  - Primary user flow with interactive payment completion
+  - Secondary server-side verification ensuring successful transactions even if users close windows before redirect
+  - Thus successful transaction takes place regardless
+- Session-based database operations to avoid race conditions
+- Elegant Payment Pages with real-time countdown timers for locked seats
 
 ## Getting Started
 
@@ -122,12 +126,14 @@ docker run -p 3000:3000 --env-file .env movie-ticket-booking
 - `GET /api/v1/payment/payment-failed` - Handle failed payments
 
 ## Security Features
-
 - Password hashing with bcrypt
 - JWT for stateless authentication
 - HTTP-only cookies for token storage
 - MongoDB transaction support for data integrity
 - Signature verification for payment webhooks
+- XSS protection with xss-clean to avoid input-injection
+- Security headers with Helmet
+- Rate limiting to prevent DDoS attacks
 
 ## Advanced Workflows
 
@@ -150,16 +156,17 @@ docker run -p 3000:3000 --env-file .env movie-ticket-booking
 - Database transactions ensure data consistency
 
 ## Deployment
-
-This API is deployed and accessible at:
-https://movie-ticket-booking-api-zg7q.onrender.com
+This API is deployed and accessible at: https://movie-ticket-booking-api-zg7q.onrender.com
 
 ## Technologies
-
-- **Express** - Fast, unopinionated web framework
-- **MongoDB/Mongoose** - Database and ODM
-- **JWT** - Secure authentication
-- **bcrypt** - Password hashing
-- **Razorpay** - Payment processing
-- **Nodemailer** - Email notifications
-- **Docker** - Containerization
+- Express - Fast, unopinionated web framework
+- MongoDB/Mongoose - Database and ODM
+- JWT - Secure authentication
+- bcrypt - Password hashing
+- Razorpay - Payment processing
+- Nodemailer - Email notifications
+- Socket.io - Real-time communications
+- Helmet - Secure HTTP headers
+- XSS-Clean - Cross-site scripting protection
+- Express-Rate-Limit - API rate limiting
+- Docker - Containerization
