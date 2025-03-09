@@ -517,20 +517,20 @@ const handleSuccessfulPayment = async (booking, payment, session) => {
       await show.save({ session });
       console.log(`Updated show ${show._id} booked seats to ${show.bookedSeats}`);
       
-      // If we created our own session, commit it
+      // If we created our own session commit it
       if (!useProvidedSession) {
         await session.commitTransaction();
         session.endSession();
       }
   
     } catch (error) {
-      // If we created our own session, abort it
+      // If we created our own session  abort it
       if (session && !session.inTransaction()) {
         await session.abortTransaction();
         session.endSession();
       }
       console.error('Failed to process successful payment:', error);
-      throw error; // Re-throw to trigger transaction rollback
+      throw error; 
     }
 };
 

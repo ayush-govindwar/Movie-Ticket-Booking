@@ -13,7 +13,6 @@ const {
 router.post('/addShow/:Id',authenticateUser, authorizePermissions('admin'),addShow)
 router.get('/getAllShows',authenticateUser,getAllShows)
 router.delete('/deleteShow/:id',authenticateUser, authorizePermissions('admin'),deleteShow)
-// Change the route definition to use lowercase ':id'
 router.put('/updateShow/:id', authenticateUser, authorizePermissions('admin'), updateShow);
 
 module.exports = router
