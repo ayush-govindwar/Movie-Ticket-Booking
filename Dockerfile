@@ -10,8 +10,6 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# If you're building your code for production
-# RUN npm ci --only=production
 
 # Copy app source code
 COPY . .
