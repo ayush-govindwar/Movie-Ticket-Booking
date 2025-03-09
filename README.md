@@ -97,11 +97,15 @@ npm start
 
 #### Docker Setup
 ```bash
+# Build and run with Docker Compose
+docker-compose up -d
+
+# Or if you prefer to build and run manually:
 # Build the Docker image
-docker build -t movie-ticket-booking .
+docker build -t movie-ticket-booking-api .
 
 # Run the container
-docker run -p 3000:3000 --env-file .env movie-ticket-booking
+docker run -p 5001:5001 --env-file .env movie-ticket-booking-api
 ```
 
 ## API Endpoints
