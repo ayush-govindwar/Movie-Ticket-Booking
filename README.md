@@ -20,7 +20,7 @@ A full-featured API for movie ticket booking with advanced reservation managemen
 - Email Notifications to attendees when show details are modified
 
 ### Booking System
-- Intelligent Seat Locking mechanism that temporarily reserves seats during payment process
+- Intelligent Seat Locking mechanism that temporarily reserves seats during payment process (refer assets folder for example)
 - Automated Lock Release for abandoned/expired bookings (prevents ghost bookings)
 - Attendee Tracking for each show
 
@@ -42,7 +42,8 @@ A full-featured API for movie ticket booking with advanced reservation managemen
   - Secondary server-side verification ensuring successful transactions even if users close windows before redirect
   - Thus successful transaction takes place regardless
 - Session-based database operations to avoid race conditions
-- Elegant Payment Pages with real-time countdown timers for locked seats
+- Elegant Payment Pages with real-time countdown timers for locked seats (refer assets folder for images)
+
 
 ## Getting Started
 
