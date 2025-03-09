@@ -14,7 +14,7 @@ const getAllShows = async (req, res) => {
   
       // Group shows by movieId
       const showsByMovieId = shows.reduce((acc, show) => {
-        const movieId = show.movieId.toString(); // Convert ObjectId to string
+        const movieId = show.movieId.toString(); // Convert objectId to string
         if (!acc[movieId]) {
           acc[movieId] = [];
         }
@@ -72,9 +72,9 @@ try {
 };
 
 const deleteShow = async (req, res) => {
-    const { id: showId } = req.params; // Extract showId from URL parameters
+    const { id: showId } = req.params; // Extract showId from url parameters
   
-    // Check if showId is a valid ObjectId
+    // Check if showId is a valid objectId
     if (!mongoose.Types.ObjectId.isValid(showId)) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         message: 'Invalid Show ID',
@@ -119,7 +119,7 @@ const updateShow = async (req, res) => {
         message: 'Show not found',
       });
     }
-
+    
     const allowedUpdates = ['theater', 'showTime', 'totalSeats', 'bookedSeats', 'basePrice'];
     const updates = Object.keys(req.body);
     const isValidOperation = updates.every(update => allowedUpdates.includes(update));
@@ -143,7 +143,7 @@ const updateShow = async (req, res) => {
     // Send response first
     res.status(StatusCodes.OK).json({ show: updatedShow });
 
-    // Email notification logic
+    // Email notification 
     const populatedShow = await Show.findById(updatedShow._id)
       .populate('movieId', 'title');
 

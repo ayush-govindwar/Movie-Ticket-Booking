@@ -49,7 +49,7 @@ const createRazorpayOrder = async (req, res) => {
       
       const { userId } = req.user;
   
-      // 1. Verify seat availability with locks
+      // Verify seat availability with locks
       const show = await Show.findById(showId).session(session);
       if (!show) {
         await session.abortTransaction();
@@ -63,7 +63,7 @@ const createRazorpayOrder = async (req, res) => {
         return res.status(400).json({ message: 'Not enough seats available' });
       }
   
-      // 2. Calculate price
+      // Calculate price (func in utils)
       const pricePerSeat = calculateDynamicPrice({
         basePrice: show.basePrice,
         bookedSeats: show.bookedSeats,
@@ -75,7 +75,7 @@ const createRazorpayOrder = async (req, res) => {
   
       const totalPrice = pricePerSeat * seatsBooked;
   
-      // 3. Lock seats for 10 minutes
+      // Lock seats for 10 minutes
       const lockDuration = 10 * 60 * 1000; // 10 minutes in ms
       const lockedUntil = new Date(Date.now() + lockDuration);
   
@@ -84,7 +84,7 @@ const createRazorpayOrder = async (req, res) => {
       show.lockedUntil = lockedUntil;
       await show.save({ session });
   
-      // 4. Create temporary booking
+      // Create temporary booking
       const booking = await Booking.create([{
         userId,
         showId,
@@ -96,9 +96,9 @@ const createRazorpayOrder = async (req, res) => {
         razorpayOrderId: null
       }], { session });
   
-      // 5. Create Razorpay order
+      // Create Razorpay order
       const order = await razorpay.orders.create({
-        amount: Math.round(totalPrice * 100), // Convert to smallest currency unit (paise)
+        amount: Math.round(totalPrice * 100), // Convert into paise
         currency: "INR",
         receipt: `booking_${booking[0]._id}`,
         notes: {
@@ -108,7 +108,7 @@ const createRazorpayOrder = async (req, res) => {
         }
       });
   
-      // 6. Update booking with order ID
+      // Update booking with order Id
       await Booking.findByIdAndUpdate(
         booking[0]._id,
         { razorpayOrderId: order.id },
@@ -117,7 +117,7 @@ const createRazorpayOrder = async (req, res) => {
   
       await session.commitTransaction();
   
-      // Generate payment URL and return
+      // Generate payment url
       const paymentUrl = `${req.protocol}://${req.get('host')}/api/v1/payment/pay/${order.id}`;
       console.log(`Created payment URL: ${paymentUrl} for booking ${booking[0]._id}`);
       
@@ -172,7 +172,7 @@ const getPaymentPage = async (req, res) => {
       
       // Get show details for display
       const show = booking.showId;
-      const formattedShowTime = new Date(show.showTime).toLocaleString();
+      const formattedShowTime = new Date(show.showTime).toLocaleString(); // Local timw
       
       // Render payment page
       res.send(`
@@ -378,7 +378,7 @@ const handlePaymentFailure = async (req, res) => {
   const { error, order_id } = req.query;
   
   try {
-    // Find and update booking
+    
     const booking = await Booking.findOne({ razorpayOrderId: order_id });
     
     if (booking) {
@@ -443,7 +443,7 @@ const handlePaymentWebhook = async (req, res) => {
       const payment = body.payload.payment?.entity;
       if (!payment) throw new Error('Invalid payment data');
   
-      // Find booking from the order
+      
       const order = await razorpay.orders.fetch(payment.order_id);
       const bookingId = order.notes.bookingId;
       
@@ -495,14 +495,14 @@ const handleSuccessfulPayment = async (booking, payment, session) => {
         console.warn(`Payment amount mismatch: expected ${expectedAmount}, got ${payment.amount}`);
       }
   
-      // Update booking
+      
       booking.paymentStatus = 'success';
       booking.razorpayPaymentId = payment.id;
       booking.lockedSeats = 0;
       booking.lockedUntil = null;
       await booking.save({ session });
   
-      // Update show seats - crucial part
+      
       const show = await Show.findById(booking.showId).session(session);
       if (!show) throw new Error(`Show not found: ${booking.showId}`);
       
@@ -573,7 +573,7 @@ const handleFailedPayment = async (booking, session) => {
   }
 };
 
-// Background job to release expired locks
+// release expired locks
 const startLockCleanupJob = () => {
   console.log('Starting seat lock cleanup job...');
   
@@ -611,7 +611,7 @@ const startLockCleanupJob = () => {
   }, 60 * 1000); // Run every minute
 };
 
-// Add new routes/endpoints
+
 module.exports = { 
   createRazorpayOrder, 
   handlePaymentWebhook,
