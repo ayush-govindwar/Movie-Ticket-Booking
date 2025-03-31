@@ -44,6 +44,13 @@ app.use(cors({ origin: '*' }));
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(helmet());
 app.use(xss());
+app.use((req, res, next) => {
+  res.setHeader(
+      "Content-Security-Policy",
+      "script-src 'self' https://checkout.razorpay.com 'unsafe-inline';"
+  );
+  next();
+});
 
 
 app.use('/api/v1/auth', authRouter);

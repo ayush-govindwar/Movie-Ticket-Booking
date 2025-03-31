@@ -574,7 +574,7 @@ const handleFailedPayment = async (booking, session) => {
 };
 
 // release expired locks
-const startLockCleanupJob = () => {
+const startLockCleanupJob = () => { // Booking model
   console.log('Starting seat lock cleanup job...');
   
   setInterval(async () => {
@@ -608,7 +608,7 @@ const startLockCleanupJob = () => {
     } catch (error) {
       console.error('Error in cleanup job:', error);
     }
-  }, 60 * 1000); // Run every minute
+  }, 60 * 1000); // Run every min
 };
 
 

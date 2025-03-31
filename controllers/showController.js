@@ -20,7 +20,7 @@ const getAllShows = async (req, res) => {
         }
         acc[movieId].push(show);
         return acc;
-      }, {});
+      }, {}); // Build obj
   
       res.status(StatusCodes.OK).json({ showsByMovieId });
     } catch (error) {
@@ -122,7 +122,7 @@ const updateShow = async (req, res) => {
     
     const allowedUpdates = ['theater', 'showTime', 'totalSeats', 'bookedSeats', 'basePrice'];
     const updates = Object.keys(req.body);
-    const isValidOperation = updates.every(update => allowedUpdates.includes(update));
+    const isValidOperation = updates.every(update => allowedUpdates.includes(update)); // Returns true or false
 
     if (!isValidOperation) {
       return res.status(StatusCodes.BAD_REQUEST).json({

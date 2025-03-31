@@ -54,7 +54,7 @@ const { calculateDynamicPrice } = require('../utils/pricing');
 const simulatePrice = async (req, res) => {
   const { seatsBooked, currentBookedSeats, totalSeats, basePrice, showTime, bookingTime } = req.body;
 
-  // Validation
+ 
   if ([seatsBooked, currentBookedSeats, totalSeats, basePrice].some(v => typeof v !== 'number') || 
       !showTime || !bookingTime) {
     return res.status(400).json({ message: 'Invalid parameters' });
