@@ -5,6 +5,7 @@ const movieSchema = new mongoose.Schema({
   genre: { type: String, required: true },
   duration: { type: Number, required: true }, // In minutes
   releaseDate: { type: Date, required: true },
+  image: { type: String }, // URL of the poster
 });
 
 module.exports = mongoose.model("Movie", movieSchema);
