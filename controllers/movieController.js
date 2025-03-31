@@ -9,26 +9,28 @@ const getAllmovies = async (req, res) => {
     res.status(StatusCodes.OK).json({ movies, count: movies.length })
   }
 
-const addmovie = async (req, res) => {
-const { title, genre, duration, releaseDate} = req.body;
+  const addmovie = async (req, res) => {
+    const { title, genre, duration, releaseDate, image } = req.body; // Added image
 
-const movieData = {
-title,
-genre,
-duration,
-releaseDate
+    const movieData = {
+        title,
+        genre,
+        duration,
+        releaseDate,
+        image // Added image to the object
+    };
+
+    try {
+        const movie = await Movie.create(movieData);
+        res.status(StatusCodes.CREATED).json({ movie });
+    } catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            message: 'Failed to create movie',
+            error: error.message,
+        });
+    }
 };
 
-try {
-    const movie = await Movie.create(movieData);
-    res.status(StatusCodes.CREATED).json({ movie });
-} catch (error) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-    message: 'Failed to create movie',
-    error: error.message,
-    });
-}
-};
 
 const deleteMovie = async (req, res) => {
     const { id: movieId } = req.params; // 
